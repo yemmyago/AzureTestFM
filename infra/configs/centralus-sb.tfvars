@@ -69,9 +69,16 @@ assignment = [
 
 law = [
   {
-    name              = "laaw-fmtest-sb-cus-01"
+    name              = "laws-fmtest-sb-cus"
     sku               = "PerGB2018"
     retention_in_days = 30
+
+  }
+]
+
+acaenv = [
+  {
+    name = "acaenv-fmtest-sb-cus"
 
   }
 ]
