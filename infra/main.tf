@@ -57,6 +57,29 @@ resource "azurerm_container_registry" "acr" {
 
   depends_on = [
     azurerm_resource_group.rg,
-    data.azurerm_key_vault_key.kv
+    data.azurerm_key_vault_key.kv,
+    azurerm_user_assigned_identity.uami
+  ]
+}
+
+resource "azurerm_user_assigned_identity" "uami" {
+  for_each            = local.uami
+  location            = azurerm_resource_group.rg.location
+  name                = each.value.name
+  resource_group_name = azurerm_resource_group.rg.name
+
+  depends_on = [
+    azurerm_resource_group.rg
+  ]
+}
+
+resource "azurerm_role_assignment" "assignment" {
+  for_each             = local.assignment
+  scope                = azurerm_resource_group.rg
+  role_definition_name = each.value.role_definition_name
+  principal_id         = azurerm_user_assigned_identity.uami.principal_id
+  depends_on = [
+    azurerm_user_assigned_identity.uami,
+    azurerm_resource_group.rg
   ]
 }

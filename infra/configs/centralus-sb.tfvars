@@ -35,7 +35,7 @@ acr = [
     }
 
     identity = {
-      type = "SystemAssigned"
+      type = "UserAssigned"
     }
 
     trust_policy = {
@@ -51,4 +51,17 @@ acr = [
 
   }
 
+]
+
+uami = [
+  {
+    name = "uami-fmtest-sb-cus"
+
+  }
+]
+
+assignment = [
+  {
+    role_definition_name = "acrpull"
+  }
 ]
