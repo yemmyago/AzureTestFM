@@ -1,0 +1,58 @@
+parameters:
+  - name: configs
+    displayName: Environment Configs (tfvars)?
+    type: object
+    default:
+      - centralus-sb
+      - centralus-prd
+      - eastus2-sb
+      - eastus2-prd
+
+  - name: plan_only
+    displayName: Plan Only?
+    type: string
+    default: Yes
+    values:
+      - Yes
+      - No
+
+  - name: destroy
+    displayName: Destroy?
+    type: boolean
+    default: false
+
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+  paths:
+    include:
+      - "*.tf"
+      - "*.hcl"
+      - "*.tfvars"
+      - ".azuredevops/"
+      - "infra/"
+    exclude:
+      - "infra/documentation/"
+      - "infra/docs/"
+      - "infra/*.md"
+
+variables:
+  - group: terraform-secrets
+  - group: terraform-common
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: AzureTestFM/terraform-pipelines-azure
+      ref: "refs/heads/main"
+
+extends:
+  template: terraform-cicd.yaml@templates
+  parameters:
+    policy_branch_name: main
+    destroy: ${{ parameters.destroy }}
+    configs: ${{ parameters.configs }}
+    plan_only: ${{ parameters.plan_only }}
