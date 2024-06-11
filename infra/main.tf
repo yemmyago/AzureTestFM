@@ -75,11 +75,26 @@ resource "azurerm_user_assigned_identity" "uami" {
 
 resource "azurerm_role_assignment" "assignment" {
   for_each             = local.assignment
+  name                 = each.value.name
   scope                = azurerm_resource_group.rg
   role_definition_name = each.value.role_definition_name
   principal_id         = azurerm_user_assigned_identity.uami.principal_id
+
   depends_on = [
     azurerm_user_assigned_identity.uami,
+    azurerm_resource_group.rg
+  ]
+}
+
+resource "azurerm_log_analytics_workspace" "law" {
+  for_each            = local.law
+  name                = each.value.name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  sku                 = each.value.sku
+  retention_in_days   = each.value.retention_in_days
+
+  depends_on = [
     azurerm_resource_group.rg
   ]
 }

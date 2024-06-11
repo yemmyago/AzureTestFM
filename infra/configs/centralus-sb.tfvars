@@ -62,6 +62,16 @@ uami = [
 
 assignment = [
   {
+    name                 = "uami-fmtest-sb-cus-01"
     role_definition_name = "acrpull"
+  }
+]
+
+law = [
+  {
+    name              = "laaw-fmtest-sb-cus-01"
+    sku               = "PerGB2018"
+    retention_in_days = 30
+
   }
 ]
