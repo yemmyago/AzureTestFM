@@ -1,3 +1,19 @@
+variable "azure_provider_default" {
+  description = ""
+  type = object({
+    subscription_id = string
+    tenant_id       = string
+
+  })
+}
+
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+  default     = {}
+}
+
+
 variable "rgs" {
   description = "name of the resource group"
   default     = {}
@@ -59,3 +75,4 @@ variable "acaenvs" {
   default     = {}
 
 }
+

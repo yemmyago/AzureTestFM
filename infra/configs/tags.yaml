@@ -1,15 +1,15 @@
 tag_groups:
-  - name: Reource Tags
+  - name: Resource Tags
     tags:
       - name: EnvironmentType
         value:
-          default: 
+          default: #{env_alias}
       - name: DeploymentMethod
         value:
           default: Terraform
       - name: BusinessOwner
         value:
-          default: FM Group
+          default: FM 
             - name: BusinessOwner
       - name: ResourceOwner
         value:
