@@ -13,6 +13,41 @@ rg = [
   }
 ]
 
+kv = [
+  {
+    name                       = "kv-fmtest-sb-cus"
+    sku                        = "Premium"
+    soft_delete_retention_days = 30
+    purge_protection_enabled   = false
+    bypass                     = "AzureServices"
+    default_action             = "Deny"
+  }
+
+]
+
+
+kvsecret = [
+  {
+    name            = "kvsecret-fmtest-sb-cus"
+    value           = "this is the secret for the aca"
+    expiration_date = "2024-12-11T00:00:00Z"
+
+  }
+]
+
+
+kvkey = [
+  {
+    name                 = "kvkey-fmtest-sb-cus"
+    key_type             = "RSA"
+    key_size             = 2048
+    time_before_expiry   = "P30D"
+    expire_after         = "P30D"
+    notify_before_expiry = "P29D"
+  }
+]
+
+
 acr = [
   {
 
@@ -80,5 +115,34 @@ acaenv = [
   {
     name = "acaenv-fmtest-sb-cus"
 
+  }
+]
+
+aca = [
+  {
+    name          = "aca-fmtest-sb-cus"
+    revision_mode = "Multiple"
+    template = {
+      max_replicas = 3
+      min_replicas = 1
+      container = {
+        name   = "cont-fmtest-sb-cus"
+        image  = "acr-fmtest-sb-cus.azurecr.io/repofmtest/fmtestwebapp:v1"
+        cpu    = 0.5
+        memory = "0.5Gi"
+        readiness_probe = {
+          transport = "HTTP"
+          port : 5000
+        }
+        liveness_probe = {
+          transport = "HTTP"
+          port : 5000
+        }
+      }
+      http_scale_rule = {
+        name                = "http-scale-rule-fm01"
+        concurrent_requests = 10
+      }
+    }
   }
 ]

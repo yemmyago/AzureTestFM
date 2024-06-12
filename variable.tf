@@ -27,3 +27,35 @@ variable "laws" {
   default     = {}
 
 }
+
+variable "kvs" {
+  description = ""
+  default     = {}
+
+}
+
+variable "kvsecrets" {
+  description = ""
+  default     = {}
+  sensitive   = true
+
+}
+
+variable "kvkeys" {
+  description = ""
+  default     = {}
+  sensitive   = true
+
+}
+
+variable "acas" {
+  description = ""
+  default     = {}
+
+}
+
+variable "acaenvs" {
+  description = ""
+  default     = {}
+
+}

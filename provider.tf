@@ -1,9 +1,8 @@
 terraform {
-  required_version = ">= 1.8.4"
+  required_version = ">= 1.3.4"
 
   backend "azurerm" {
-    # This will not be needed for terraform cli version 1.2.x and above (as it will be enabled by default)
-    use_microsoft_graph = true
+    
   }
 
   required_providers {
