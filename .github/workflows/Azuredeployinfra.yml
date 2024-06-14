@@ -15,7 +15,7 @@ jobs:
     defaults:
       run:
         shell: bash
-          working-directory: ./terraform
+          working-directory: ./AzureTestFM/terraform
 
     steps:
       - name: Checkout
