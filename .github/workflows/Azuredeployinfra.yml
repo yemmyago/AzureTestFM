@@ -1,9 +1,9 @@
 name: Terraform infra deployment
 
 on:
-  release:
-    types: [published]
-    branches: [main]
+  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   terraform:
