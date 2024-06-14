@@ -33,10 +33,6 @@ jobs:
       - name: Terraform init
         id: init
         run: terraform init
-        with:
-          tf_actions_working_dir: ./terraform
-          args: 'var-file="centralus-sb.tfvars"'
-
        
       - name: Terraform Validate
         id: validate
