@@ -1,0 +1,32 @@
+name: Terraform deployment
+
+on: 
+  push:
+    branches:
+      - main
+      - fmtestbranch
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        
+    steps:
+  # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+
+  # Login and connect to the storage for the stet file
+      set -a 
+          source .env.backend
+          az login --service-principal \
+            -u ${{ secrets.ARM_CLIENT_ID }} \
+            -p ${{ secrets.ARM_CLIENT_SECRET }} \
+            --tenant ${{ secrets.ARM_TENANT_ID }}v
+          
+          az storage blob list \
+            --account-name safmtestsbeus2 \
+            --container-name blob-fmtest-tfstate
