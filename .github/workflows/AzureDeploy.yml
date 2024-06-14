@@ -1,6 +1,6 @@
-name: Terrafomr deployment
+name: Terraform deployment
 
-on: workflow_dispatch
+on: [push]
 
 jobs:
   terraform:
