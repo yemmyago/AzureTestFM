@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.3.4"
+  required_version = ">= 1.6.6"
 
   backend "azurerm" {
     tenant_id            = "aa3ba334-375c-4f89-8679-aacd7f308101"
