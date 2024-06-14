@@ -15,7 +15,7 @@ jobs:
     defaults:
       run:
         shell: bash
-          working-directory: ./AzureTestFM/terraform
+          working-directory: ./AzureTestFM
 
     steps:
       - name: Checkout
@@ -33,6 +33,9 @@ jobs:
       - name: Terraform init
         id: init
         run: terraform init
+        with:
+          tf_actions_working_dir: ./AzureTestFM/
+          args: 'var-file="centralus-sb.tfvars"'
 
        
       - name: Terraform Validate
