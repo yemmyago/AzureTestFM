@@ -1,9 +1,9 @@
-on:
-  release:
-    types: [published]
-    branches: [main]
+name: Terraform infra deployment
 
-name: On Release Main
+on:
+  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   terraform:
