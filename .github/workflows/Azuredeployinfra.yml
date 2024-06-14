@@ -35,11 +35,7 @@ jobs:
         id: init
         run: |
 
-          az login --service-principal \
-            -u ${{ secrets.ARM_CLIENT_ID }} \
-            -p ${{ secrets.ARM_CLIENT_SECRET }} \
-            --tenant ${{ secrets.ARM_TENANT_ID }} 
-                   
+          set -a        
           terraform init
 
        
