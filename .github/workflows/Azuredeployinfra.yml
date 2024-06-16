@@ -1,62 +1,91 @@
-name: Terraform infrast deployment
+name: Terraform Resource deployment
 
 
 on: 
-  workflow_dispatch:
+  Push:
     branches:
       - main
       - fmtestbranch
 
+env:
+  tf_resource_group_name: "rg-fmtest-sb-eus2"
+  tf_storage_account_name: "safmtestsbeus2"
+  tf_state_container: "blob-fmtest-tfstate"
+  tf_state_key: "AzureTestFM.tfstate"
 
 jobs:
-  terraform:
-    name: Terraform
-    runs-on: ubuntu-latest
-    env:
-       creds: ${{ secrets.AZURE_CREDENTIALS }}
-       
+  terraform-fmt-check:
+    if: github.event_name == 'pull_request'
     defaults:
       run:
-        shell: bash
         working-directory: ./terraform
-
+    name: terraform
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      ARM_CLIENT_ID: "${{ secrets.ARM_CLIENT_ID }}"
+      ARM_SUBSCRIPTION_ID: "${{ secrets.ARM_SUBSCRIPTION_ID }}"
+      ARM_TENANT_ID: "${{ secrets.ARM_TENANT_ID }}"
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    - name: Checkout Code
+      uses: actions/checkout@v2.5.0
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "1.6.6"
-
-      - name: Terraform fmt
-        id: fmt
-        run: terraform fmt -check
-
-      - name: Azure Authentication
-        run: | 
-        az login --service-principal \
-            -u ${{ secrets.AZURE_CLIENT_ID }} \
-            -p ${{ secrets.CLIENT_SECRET }} \
-            --tenant ${{ secrets.TENANT_ID }}
-
-      - name: Terraform init
-        id: init
-        run: |      
-          terraform init
-
-       
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
-
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -no-color
-        continue-on-error: true
-
-      - name: Terraform apply
-        id: apply
-        run: terraform apply -auto-approve
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+           
+    - name: Terraform Init
+      id: init
+      env:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
+        STORAGE_ACCOUNT: ${{ secrets.STORAGE_ACCOUNT }}
+        CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+      run: terraform init -backend-config="storage_account_name=$STORAGE_ACCOUNT" -backend-config="container_name=$CONTAINER_NAME" -backend-config="resource_group_name=$RESOURCE_GROUP"
 
 
+    - name: Terraform Fmt
+      id: fmt
+      run: terraform fmt
+      working-directory: ./terraform
+
+    - name: Terraform Validate
+      id: validate
+      ## Run even if formatting fails
+      if: success() || failure()
+      run: terraform validate -no-color
+
+    - name: Terraform Plan
+      run: |
+        export ARM_CLIENT_ID=$ARM_CLIENT_ID
+        export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
+        export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
+        export ARM_TENANT_ID=$ARM_TENANT_ID
+
+        terraform plan -input=false -var rg_name=$RG_NAME
+      env:
+        ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
+        ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+        ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
+        ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
+        RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
+                  
+    - name: Terraform Apply
+      if: github.event_name == 'pull_request'
+      run: |
+        export ARM_CLIENT_ID=$ARM_CLIENT_ID
+        export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
+        export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
+        export ARM_TENANT_ID=$ARM_TENANT_ID
+
+        terraform apply -auto-approve -input=false -var rg_name=$RG_NAME
+      env:
+        ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
+        ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+        ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
+        ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
+
+    
