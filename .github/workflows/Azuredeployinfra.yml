@@ -6,12 +6,6 @@ on:
       - main
       - fmtestbranch
 
-env:
-  tf_resource_group_name: "rg-fmtest-sb-eus2"
-  tf_storage_account_name: "safmtestsbeus2"
-  tf_state_container: "blob-fmtest-tfstate"
-  tf_state_key: "AzureTestFM.tfstate"
-
 jobs:
   terraform-fmt-check:
     if: github.event_name == 'pull_request'
