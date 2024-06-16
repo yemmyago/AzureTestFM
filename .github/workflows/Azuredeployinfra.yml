@@ -7,7 +7,6 @@ on:
       - main
       - fmtestbranch
 
-
 jobs:
   terraform:
     name: Terraform
@@ -19,6 +18,8 @@ jobs:
       run:
         shell: bash
         working-directory: ./terraform
+
+    
 
     steps:
       - name: Checkout
