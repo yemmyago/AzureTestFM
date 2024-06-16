@@ -34,7 +34,7 @@ jobs:
         run: terraform fmt -check
 
       - name: Azure Authentication
-        uses: azure/login@v2
+        uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
