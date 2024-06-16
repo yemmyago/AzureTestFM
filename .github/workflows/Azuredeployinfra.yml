@@ -1,15 +1,16 @@
-name: Terraform infra deployment
+name: Terraform infrast deployment
 
 
-on:
+on: 
   workflow_dispatch:
     branches:
       - main
       - fmtestbranch
 
+
 jobs:
   terraform:
-    name: 'Terraform'
+    name: Terraform
     runs-on: ubuntu-latest
     env:
        creds: ${{ secrets.AZURE_CREDENTIALS }}
@@ -36,6 +37,7 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
       - name: Terraform init
         id: init
         run: |      
