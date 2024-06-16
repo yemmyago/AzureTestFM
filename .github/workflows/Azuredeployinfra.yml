@@ -53,7 +53,7 @@ jobs:
 
     - name: Terraform Validate
       id: validate
-      # Run even if formatting fails
+      ## Run even if formatting fails
       if: success() || failure()
       run: terraform validate -no-color
 
