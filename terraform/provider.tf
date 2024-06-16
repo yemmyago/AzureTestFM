@@ -21,13 +21,8 @@ terraform {
 }
 
 provider "azurerm" {
-
+  subscription_id = var.azure_provider_default.subscription_id
+  tenant_id       = var.azure_provider_default.tenant_id
+  
   features {}
-
-  subscription_id = ${{ secrets.ARM_SUBSCRIPTION_ID }}
-  tenant_id       = ${{ secrets.ARM_TENANT_ID }}
-  client_id       = ${{ secrets.ARM_CLIENT_ID }}
-  client_secret   = ${{ secrets.ARM_CLIENT_SECRET }}
-  
-  
 }
