@@ -26,6 +26,14 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         
+    - task: AzureCLI@2
+      displayName: 'Azure CLI - Promote SP for Terraform'
+      inputs:
+        azureSubscription: '35b62742-ab17-4688-b514-8f1efbd6e1d5'
+        scriptType: bash 
+        addSpnToEnvironment: true
+        scriptLocation: ./terraform
+
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
