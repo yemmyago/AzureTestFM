@@ -7,7 +7,6 @@ on:
       - fmtestbranch
 
 env:
-  TF_LOG: Info
   tf_resource_group_name: "rg-fmtest-sb-eus2"
   tf_storage_account_name: "safmtestsbeus2"
   tf_state_container: "blob-fmtest-tfstate"
@@ -37,10 +36,10 @@ jobs:
     - name: Terraform Init
         id: init
         env:
-          ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
-          ARM_CLIENT_SECRET: ${{secrets.ARM_CLIENT_SECRET}}
-          ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
-          ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
         run: terraform init -backend-config="storage_account_name=$tf_storage_account_name" -backend-config="container_name=$tf_state_container" -backend-config="resource_group_name=$ tf_resource_group_name"
 
 
