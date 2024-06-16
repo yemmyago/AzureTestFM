@@ -11,7 +11,7 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     env:
-       creds: ${{ secrets.AZURE_CRED*ENTIALS }}
+       creds: ${{ secrets.AZURE_CREDENTIALS }}
        
     defaults:
       run:
@@ -30,15 +30,14 @@ jobs:
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
-
-      - name: Terraform init
-        id: init
-        run: |
-        uses: azure/login@v2
+      - name: Azure Authentication
+        id: login
+        uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-          
-
+      - name: Terraform init
+        id: init
+        run: |      
           terraform init
 
        
