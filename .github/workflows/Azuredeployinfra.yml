@@ -8,7 +8,6 @@ on:
 
 jobs:
   terraform-fmt-check:
-    if: github.event_name == 'pull_request'
     defaults:
       run:
         working-directory: ./terraform
