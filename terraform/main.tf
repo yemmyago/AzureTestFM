@@ -6,9 +6,9 @@ resource "azurerm_resource_group" "rg" {
 
 resource "azurerm_user_assigned_identity" "uami" {
   for_each            = local.uamis
-  location            = azurerm_resource_group.rg.location
+  location            = each.value.location
   name                = each.value.name
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = each.value.resource_group_name
 
   depends_on = [
     azurerm_resource_group.rg
@@ -18,8 +18,8 @@ resource "azurerm_user_assigned_identity" "uami" {
 resource "azurerm_key_vault" "kv" {
   for_each                   = local.kvs
   name                       = each.value.name
-  resource_group_name        = azurerm_resource_group.rg.name
-  location                   = azurerm_resource_group.rg.location
+  resource_group_name        = each.value.resource_group_name
+  location                   = each.value.location
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   sku_name                   = each.value.sku_name
   soft_delete_retention_days = each.value.soft_delete_retention_days
@@ -167,10 +167,10 @@ resource "azurerm_role_assignment" "assignment" {
 }
 
 resource "azurerm_log_analytics_workspace" "law" {
-  for_each            = local.law
+  for_each            = local.laws
   name                = each.value.name
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name        = each.value.resource_group_name
+  location                   = each.value.location
   sku                 = each.value.sku
   retention_in_days   = each.value.retention_in_days
 

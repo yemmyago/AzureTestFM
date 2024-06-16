@@ -16,6 +16,8 @@ rg = [
 kv = [
   {
     name                       = "kv-fmtest-sb-cus"
+    location = "centralus"
+    resource_group_name = "rg-fmtest-sb-cus"
     sku                        = "Premium"
     soft_delete_retention_days = 30
     purge_protection_enabled   = false
@@ -91,6 +93,8 @@ acr = [
 uami = [
   {
     name = "uami-fmtest-sb-cus"
+    location = "centralus"
+    resource_group_name = "rg-fmtest-sb-cus"
 
   }
 ]
@@ -105,6 +109,8 @@ assignment = [
 law = [
   {
     name              = "laws-fmtest-sb-cus"
+    location = "centralus"
+    resource_group_name = "rg-fmtest-sb-cus"
     sku               = "PerGB2018"
     retention_in_days = 30
 
