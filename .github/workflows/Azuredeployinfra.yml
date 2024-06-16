@@ -34,16 +34,51 @@ jobs:
       uses: hashicorp/setup-terraform@v3
            
     - name: Terraform Init
-      id: init
-      run: terraform init -backend-config="resource_group_name=$tf_resource_group_name" -backend-config="storage_account_name=$tf_storage_account_name" -backend-config="container_name=$tf_state_container" -backend-config="key=$tf_state_key"
-      env:
+        run: |
+          export ARM_CLIENT_ID=$ARM_CLIENT_ID
+          export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
+          export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
+          export ARM_TENANT_ID=$ARM_TENANT_ID
+
+          terraform init
+        env:
           ARM_CLIENT_ID: ${{secrets.AZURE_CLIENT_ID}}
           ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
           ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_SUBSCRIPTION_ID}}
           ARM_TENANT_ID: ${{secrets.AZURE_TENANT_ID}}
-      working-directory: ./terraform
 
-      - name: Terraform Fmt
+
+    - name: Terraform Fmt
         id: fmt
         run: terraform fmt
         working-directory: ./terraform
+
+    - name: Terraform Plan
+        run: |
+          export ARM_CLIENT_ID=$ARM_CLIENT_ID
+          export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
+          export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
+          export ARM_TENANT_ID=$ARM_TENANT_ID
+
+          terraform plan -input=false -var rg_name=$RG_NAME
+        env:
+          ARM_CLIENT_ID: ${{secrets.AZURE_CLIENT_ID}}
+          ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+          ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_SUBSCRIPTION_ID}}
+          ARM_TENANT_ID: ${{secrets.AZURE_TENANT_ID}}
+                  
+      - name: Terraform Apply
+        run: |
+          export ARM_CLIENT_ID=$ARM_CLIENT_ID
+          export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
+          export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
+          export ARM_TENANT_ID=$ARM_TENANT_ID
+
+          terraform apply -auto-approve -input=false -var rg_name=$RG_NAME
+        env:
+          ARM_CLIENT_ID: ${{secrets.AZURE_CLIENT_ID}}
+          ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+          ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_SUBSCRIPTION_ID}}
+          ARM_TENANT_ID: ${{secrets.AZURE_TENANT_ID}}
+
+    
