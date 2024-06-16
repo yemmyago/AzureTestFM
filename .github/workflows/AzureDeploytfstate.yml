@@ -20,8 +20,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-  # Login and connect to the storage for the stae file
-    - name: 'Az CLI login'
+  # Login and connect to the storage for the state file
+    - name: 'Az  login'
       uses: azure/login@v1
       with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
