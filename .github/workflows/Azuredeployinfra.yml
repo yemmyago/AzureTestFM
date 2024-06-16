@@ -1,8 +1,7 @@
-name: Terraform Resource deployment
-
+name: Terraform resources deployment
 
 on: 
-  Push:
+  workflow_dispatch:
     branches:
       - main
       - fmtestbranch
