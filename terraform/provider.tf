@@ -7,7 +7,7 @@ terraform {
     resource_group_name  = "rg-fmtest-sb-eus2"
     storage_account_name = "safmtestsbeus2"
     container_name       = "blob-fmtest-tfstate"
-    key                  = "AzureTestFM/tfstate"
+    key                  = "AzureTestFM.tfstate"
 
 
   }
