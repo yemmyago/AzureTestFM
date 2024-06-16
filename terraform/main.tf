@@ -1,11 +1,11 @@
 resource "azurerm_resource_group" "rg" {
-  for_each = local.rg
+  for_each = local.rgs
   name     = each.value.name
   location = each.value.location
 }
 
 resource "azurerm_user_assigned_identity" "uami" {
-  for_each            = local.uami
+  for_each            = local.uamis
   location            = azurerm_resource_group.rg.location
   name                = each.value.name
   resource_group_name = azurerm_resource_group.rg.name
@@ -16,7 +16,7 @@ resource "azurerm_user_assigned_identity" "uami" {
 }
 
 resource "azurerm_key_vault" "kv" {
-  for_each                   = local.kv
+  for_each                   = local.kvs
   name                       = each.value.name
   resource_group_name        = azurerm_resource_group.rg.name
   location                   = azurerm_resource_group.rg.location
@@ -56,7 +56,7 @@ resource "azurerm_key_vault" "kv" {
 }
 
 resource "azurerm_key_vault_secret" "kvsecret" {
-  for_each        = local.kvsecret
+  for_each        = local.kvsecrets
   name            = each.value.name
   value           = each.value.value
   key_vault_id    = azurerm_key_vault.kv.id
@@ -68,7 +68,7 @@ resource "azurerm_key_vault_secret" "kvsecret" {
 }
 
 resource "azurerm_key_vault_key" "kvkey" {
-  for_each     = local.kvkey
+  for_each     = local.kvkeys
   name         = each.value.name
   key_vault_id = azurerm_key_vault.kv.id
   key_type     = each.value.key_type
@@ -100,7 +100,7 @@ resource "azurerm_key_vault_key" "kvkey" {
 
 
 resource "azurerm_container_registry" "acr" {
-  for_each                      = local.acr
+  for_each                      = local.acrs
   name                          = each.value.name
   resource_group_name           = azurerm_resource_group.rg.name
   location                      = azurerm_resource_group.rg.location
