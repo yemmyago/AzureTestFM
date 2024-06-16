@@ -47,36 +47,36 @@ jobs:
 
 
     - name: Terraform Fmt
-        id: fmt
-        run: terraform fmt
-        working-directory: ./terraform
+      id: fmt
+      run: terraform fmt
+      working-directory: ./terraform
 
     - name: Terraform Plan
-        run: |
-          export ARM_CLIENT_ID=$ARM_CLIENT_ID
-          export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
-          export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
-          export ARM_TENANT_ID=$ARM_TENANT_ID
+      run: |
+        export ARM_CLIENT_ID=$ARM_CLIENT_ID
+        export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
+        export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
+        export ARM_TENANT_ID=$ARM_TENANT_ID
 
-          terraform plan -input=false -var rg_name=$RG_NAME
-        env:
-          ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
-          ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
-          ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
-          ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
+      terraform plan -input=false -var rg_name=$RG_NAME
+      env:
+        ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
+        ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+        ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
+        ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
                   
-      - name: Terraform Apply
-        run: |
-          export ARM_CLIENT_ID=$ARM_CLIENT_ID
-          export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
-          export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
-          export ARM_TENANT_ID=$ARM_TENANT_ID
+    - name: Terraform Apply
+      run: |
+        export ARM_CLIENT_ID=$ARM_CLIENT_ID
+        export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
+        export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
+        export ARM_TENANT_ID=$ARM_TENANT_ID
 
-          terraform apply -auto-approve -input=false -var rg_name=$RG_NAME
-        env:
-          ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
-          ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
-          ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
-          ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
+      terraform apply -auto-approve -input=false -var rg_name=$RG_NAME
+      env:
+        ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
+        ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+        ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
+        ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
 
     
