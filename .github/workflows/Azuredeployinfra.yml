@@ -1,12 +1,13 @@
 name: Terraform infrastruture deployment
 
 on: 
-  workflow_dispatch:
+  [workflow_dispatch, push] :
     branches:
       - main
       - fmtestbranch
 
 env:
+  TF_LOG: Info
   tf_resource_group_name: "rg-fmtest-sb-eus2"
   tf_storage_account_name: "safmtestsbeus2"
   tf_state_container: "blob-fmtest-tfstate"
@@ -23,9 +24,9 @@ jobs:
     permissions:
       contents: write
     env:
-      ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
-      ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-      ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+      ARM_CLIENT_ID: "${{ secrets.ARM_CLIENT_ID }}"
+      ARM_SUBSCRIPTION_ID: "${{ secrets.ARM_SUBSCRIPTION_ID }}"
+      ARM_TENANT_ID: "${{ secrets.ARM_TENANT_ID }}"
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2.5.0
@@ -42,10 +43,10 @@ jobs:
 
           terraform init
         env:
-          ARM_CLIENT_ID: ${{secrets.AZURE_CLIENT_ID}}
-          ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
-          ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_SUBSCRIPTION_ID}}
-          ARM_TENANT_ID: ${{secrets.AZURE_TENANT_ID}}
+          ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
+          ARM_CLIENT_SECRET: ${{secrets.ARM_CLIENT_SECRET}}
+          ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
+          ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
 
 
     - name: Terraform Fmt
@@ -62,10 +63,10 @@ jobs:
 
           terraform plan -input=false -var rg_name=$RG_NAME
         env:
-          ARM_CLIENT_ID: ${{secrets.AZURE_CLIENT_ID}}
+          ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
           ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
-          ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_SUBSCRIPTION_ID}}
-          ARM_TENANT_ID: ${{secrets.AZURE_TENANT_ID}}
+          ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
+          ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
                   
       - name: Terraform Apply
         run: |
@@ -76,9 +77,9 @@ jobs:
 
           terraform apply -auto-approve -input=false -var rg_name=$RG_NAME
         env:
-          ARM_CLIENT_ID: ${{secrets.AZURE_CLIENT_ID}}
+          ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
           ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
-          ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_SUBSCRIPTION_ID}}
-          ARM_TENANT_ID: ${{secrets.AZURE_TENANT_ID}}
+          ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
+          ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
 
     
