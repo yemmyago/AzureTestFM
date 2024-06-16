@@ -73,6 +73,7 @@ jobs:
         RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
                   
     - name: Terraform Apply
+      if: github.event_name == 'pull_request'
       run: |
         export ARM_CLIENT_ID=$ARM_CLIENT_ID
         export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
