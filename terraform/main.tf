@@ -183,8 +183,7 @@ resource "azurerm_container_app_environment" "acaenv" {
   for_each                   = local.acaenvs
   name                       = each.value.name
   resource_group_name        = each.value.resource_group_name
-  location                   = each.value.location
-  l                   
+  location                   = each.value.location                 
 
   depends_on = [
     azurerm_resource_group.rg,
