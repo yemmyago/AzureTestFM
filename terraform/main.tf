@@ -1,13 +1,13 @@
 resource "azurerm_resource_group" "rg" {
   for_each = local.rgs
-  name     = each.value.name
+  name     = each.key
   location = each.value.location
 }
 
 resource "azurerm_user_assigned_identity" "uami" {
   for_each            = local.uamis
   location            = each.value.location
-  name                = each.value.name
+  name                = each.key
   resource_group_name = each.value.resource_group_name
 
   depends_on = [
@@ -57,7 +57,7 @@ resource "azurerm_key_vault" "kv" {
 
 resource "azurerm_key_vault_secret" "kvsecret" {
   for_each        = local.kvsecrets
-  name            = each.value.name
+  name            = each.key
   value           = each.value.value
   key_vault_id    = azurerm_key_vault.kv.id
   expiration_date = each.value.expiration_date
@@ -69,7 +69,7 @@ resource "azurerm_key_vault_secret" "kvsecret" {
 
 resource "azurerm_key_vault_key" "kvkey" {
   for_each     = local.kvkeys
-  name         = each.value.name
+  name         = each.key
   key_vault_id = azurerm_key_vault.kv.id
   key_type     = each.value.key_type
   key_size     = each.value.key_size
@@ -155,7 +155,7 @@ resource "azurerm_container_registry" "acr" {
 
 resource "azurerm_role_assignment" "assignment" {
   for_each             = local.assignments
-  name                 = each.value.name
+  name                 = each.key
   scope                = azurerm_resource_group.rg.name
   role_definition_name = each.value.role_definition_name
   principal_id         = azurerm_user_assigned_identity.uami.principal_id
@@ -168,7 +168,7 @@ resource "azurerm_role_assignment" "assignment" {
 
 resource "azurerm_log_analytics_workspace" "law" {
   for_each            = local.laws
-  name                = each.value.name
+  name                = each.key
   resource_group_name        = each.value.resource_group_name
   location                   = each.value.location
   sku                 = each.value.sku
@@ -181,7 +181,7 @@ resource "azurerm_log_analytics_workspace" "law" {
 
 resource "azurerm_container_app_environment" "acaenv" {
   for_each                   = local.acaenvs
-  name                       = each.value.name
+  name                       = each.key
   resource_group_name        = each.value.resource_group_name
   location                   = each.value.location                 
 
