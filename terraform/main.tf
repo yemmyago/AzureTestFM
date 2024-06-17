@@ -56,7 +56,7 @@ resource "azurerm_key_vault" "kv" {
 }
 
 resource "azurerm_key_vault_secret" "kvsecret" {
-  for_each        = local.kvsecrets
+  for_each        = nonsensitive(local.kvsecrets)
   name            = each.key
   value           = each.value.value
   key_vault_id    = azurerm_key_vault.kv[*].id
@@ -68,7 +68,7 @@ resource "azurerm_key_vault_secret" "kvsecret" {
 }
 
 resource "azurerm_key_vault_key" "kvkey" {
-  for_each     = local.kvkeys
+  for_each     = nonsensitive(local.kvkeys)
   name         = each.key
   key_vault_id = azurerm_key_vault.kv[*].id
   key_type     = each.value.key_type
