@@ -63,26 +63,26 @@ acrs = [
     network_rule_bypass_option    = "AzureServices"
     quarantine_policy_enabled     = true
 
-    georeplications {
+    georeplications = {
       location                = "eastus2"
       zone_redundancy_enabled = true
     }
 
-    network_rule_set {
+    network_rule_set = {
 
       default_action = "Deny"
     }
 
-    identity {
+    identity = {
       type = "UserAssigned"
     }
 
-    trust_policy {
+    trust_policy  = {
       enabled = true
 
     }
 
-    retention_policy {
+    retention_policy = {
 
       days    = 30
       enabled = true

@@ -120,7 +120,7 @@ resource "azurerm_container_registry" "acr" {
 
     default_action = each.value.network_rule_set.default_action
     ip_rule        = each.value.network_rule_set.ip_rule
-    subnet_ids     = ach.value.network_rule_set.subnet_ids
+    subnet_ids     = each.value.network_rule_set.subnet_ids
   }
   identity {
     type         = each.value.identity.type
