@@ -20,7 +20,7 @@ variable "tags" {
 
 
 variable "rgs" {
-  description = "name of the resource group"
+  description = "resource group information"
   default     = {}
 
 }

@@ -1,6 +1,5 @@
 name: Terraform state deployment
 
-
 on: 
   workflow_dispatch:
     branches:

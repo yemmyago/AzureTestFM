@@ -1,21 +1,13 @@
-name: Terraform Resource deployment
-
+name: Terraform resources deployment
 
 on: 
-  Push:
+  workflow_dispatch:
     branches:
       - main
       - fmtestbranch
 
-env:
-  tf_resource_group_name: "rg-fmtest-sb-eus2"
-  tf_storage_account_name: "safmtestsbeus2"
-  tf_state_container: "blob-fmtest-tfstate"
-  tf_state_key: "AzureTestFM.tfstate"
-
 jobs:
   terraform-fmt-check:
-    if: github.event_name == 'pull_request'
     defaults:
       run:
         working-directory: ./terraform
@@ -65,7 +57,7 @@ jobs:
         export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
         export ARM_TENANT_ID=$ARM_TENANT_ID
 
-        terraform plan -input=false -var rg_name=$RG_NAME
+        terraform plan -input=false 
       env:
         ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
         ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
