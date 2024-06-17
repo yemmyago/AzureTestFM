@@ -110,36 +110,36 @@ resource "azurerm_container_registry" "acr" {
   anonymous_pull_enabled        = each.value.anonymous_pull_enabled
   network_rule_bypass_option    = each.value.network_rule_bypass_option
   quarantine_policy_enabled     = each.value.quarantine_policy_enabled
-  georeplications = {
+  georeplications {
     location                = each.value.georeplications.location
     zone_redundancy_enabled = each.value.georeplications.zone_redundancy_enabled
 
   }
 
-  network_rule_set = {
+  network_rule_set {
 
     default_action = try(each.value.network_rule_set.default_action, [])
     ip_rule        = concat(try(each.value.network_rule_set.ip_rule, []))
     subnet_ids     = try(each.value.network_rule_set.subnet_ids, [])
   }
-  identity = {
+  identity {
     type         = each.value.identity.type
     identity_ids = azurerm_user_assigned_identity.uami[*].id
 
   }
 
-  encryption = {
+  encryption {
 
     key_vault_key_id   = azurerm_key_vault_key.kvkey[*].id
     identity_client_id = azurerm_user_assigned_identity.uami[*].client_id
   }
 
-  trust_policy = {
+  trust_policy {
     enabled = each.value.trust_policy.enabled
 
   }
 
-  retention_policy = {
+  retention_policy {
 
     days    = each.value.retention_policy.days
     enabled = each.value.retention_policy.enabled
