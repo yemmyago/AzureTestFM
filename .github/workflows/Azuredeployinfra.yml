@@ -51,6 +51,7 @@ jobs:
       run: terraform validate -no-color
 
     - name: Terraform Plan
+      working-directory: ./terraform
       run: |
         export ARM_CLIENT_ID=$ARM_CLIENT_ID
         export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
@@ -66,13 +67,14 @@ jobs:
         RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
                   
     - name: Terraform Apply
+      working-directory: ./terraform
       run: |
         export ARM_CLIENT_ID=$ARM_CLIENT_ID
         export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
         export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
         export ARM_TENANT_ID=$ARM_TENANT_ID
 
-        terraform apply -auto-approve -input=false 
+        terraform apply -auto-approve 
       env:
         ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
         ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
