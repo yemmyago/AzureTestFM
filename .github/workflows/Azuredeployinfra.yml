@@ -10,6 +10,7 @@ jobs:
   terraform-fmt-check:
     defaults:
       run:
+        shell: bash
         working-directory: ./terraform
     name: terraform
     runs-on: ubuntu-latest
@@ -23,6 +24,9 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2.5.0
 
+    - name: Use local AzureTestFM
+      uses: ./terraform
+      
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
            
