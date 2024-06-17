@@ -66,18 +66,18 @@ jobs:
         RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
                   
     - name: Terraform Apply
-      if: github.event_name == 'pull_request'
       run: |
         export ARM_CLIENT_ID=$ARM_CLIENT_ID
         export ARM_CLIENT_SECRET=$ARM_CLIENT_SECRET
         export ARM_SUBSCRIPTION_ID=$ARM_SUBSCRIPTION_ID
         export ARM_TENANT_ID=$ARM_TENANT_ID
 
-        terraform apply -auto-approve -input=false -var rg_name=$RG_NAME
+        terraform apply -auto-approve -input=false 
       env:
         ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
         ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
         ARM_SUBSCRIPTION_ID: ${{secrets.ARM_SUBSCRIPTION_ID}}
         ARM_TENANT_ID: ${{secrets.ARM_TENANT_ID}}
+        RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
 
     
