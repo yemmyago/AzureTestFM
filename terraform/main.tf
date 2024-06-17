@@ -20,7 +20,7 @@ resource "azurerm_key_vault" "kv" {
   name                       = each.value.name
   resource_group_name        = each.value.resource_group_name
   location                   = each.value.location
-  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  tenant_id                  = "aa3ba334-375c-4f89-8679-aacd7f308101"
   sku_name                   = each.value.sku_name
   soft_delete_retention_days = each.value.soft_delete_retention_days
   network_acls {
@@ -30,8 +30,8 @@ resource "azurerm_key_vault" "kv" {
 
   }
   access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = azurerm_user_assigned_identity.uami.object_id
+    tenant_id = "aa3ba334-375c-4f89-8679-aacd7f308101"
+    object_id = [for instance in Azurerm_user_assigned_identity.uami: instance.object_id]
     key_permissions = [
       "Get",
       "List"
@@ -102,8 +102,8 @@ resource "azurerm_key_vault_key" "kvkey" {
 resource "azurerm_container_registry" "acr" {
   for_each                      = local.acrs
   name                          = each.value.name
-  resource_group_name           = azurerm_resource_group.rg.name
-  location                      = azurerm_resource_group.rg.location
+  resource_group_name        = each.value.resource_group_name
+  location                   = each.value.location
   sku                           = each.value.sku
   admin_enabled                 = each.value.admin_enabled
   public_network_access_enabled = each.value.public_network_access_enabled
@@ -154,7 +154,7 @@ resource "azurerm_container_registry" "acr" {
 
 
 resource "azurerm_role_assignment" "assignment" {
-  for_each             = local.assignment
+  for_each             = local.assignments
   name                 = each.value.name
   scope                = azurerm_resource_group.rg
   role_definition_name = each.value.role_definition_name
@@ -180,10 +180,10 @@ resource "azurerm_log_analytics_workspace" "law" {
 }
 
 resource "azurerm_container_app_environment" "acaenv" {
-  for_each                   = local.acaenv
+  for_each                   = local.acaenvs
   name                       = each.value.name
-  location                   = azurerm_resource_group.rg.location
-  resource_group_name        = azurerm_resource_group.rg.name
+  resource_group_name        = each.value.resource_group_name
+  location                   = each.value.location
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
 
   depends_on = [
@@ -194,10 +194,10 @@ resource "azurerm_container_app_environment" "acaenv" {
 }
 
 resource "azurerm_container_app" "aca" {
-  for_each                     = local.aca
+  for_each                     = local.acas
   name                         = each.value.name
   container_app_environment_id = azurerm_container_app_environment.acaenv.id
-  resource_group_name          = azurerm_resource_group.rg.name
+  resource_group_name          = each.value.name
   revision_mode                = each.value.revision_mode
 
   identity {

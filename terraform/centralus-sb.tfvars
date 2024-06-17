@@ -6,14 +6,14 @@ azure_provider_default = {
   environment_type_alias = "sb"
 }
 
-rg = [
+rgs = [
   {
     name     = "rg-fmtest-sb-cus"
     location = "centralus"
   }
 ]
 
-kv = [
+kvs = [
   {
     name                       = "kv-fmtest-sb-cus"
     location = "centralus"
@@ -28,7 +28,7 @@ kv = [
 ]
 
 
-kvsecret = [
+kvsecrets = [
   {
     name            = "kvsecret-fmtest-sb-cus"
     value           = "this is the secret for the aca"
@@ -38,7 +38,7 @@ kvsecret = [
 ]
 
 
-kvkey = [
+kvkeys = [
   {
     name                 = "kvkey-fmtest-sb-cus"
     key_type             = "RSA"
@@ -50,10 +50,12 @@ kvkey = [
 ]
 
 
-acr = [
+acrs = [
   {
 
     name                          = "acr-fmtest-sb-cus"
+    location = "centralus"
+    resource_group_name = "rg-fmtest-sb-cus"
     sku                           = "Premium"
     admin_enabled                 = false
     public_network_access_enabled = false
@@ -90,7 +92,7 @@ acr = [
 
 ]
 
-uami = [
+uamis = [
   {
     name = "uami-fmtest-sb-cus"
     location = "centralus"
@@ -99,14 +101,14 @@ uami = [
   }
 ]
 
-assignment = [
+assignments = [
   {
     name                 = "uami-fmtest-sb-cus-01"
     role_definition_name = "acrpull"
   }
 ]
 
-law = [
+laws = [
   {
     name              = "laws-fmtest-sb-cus"
     location = "centralus"
@@ -117,16 +119,19 @@ law = [
   }
 ]
 
-acaenv = [
+acaenvs = [
   {
     name = "acaenv-fmtest-sb-cus"
+    location = "centralus"
+    resource_group_name = "rg-fmtest-sb-cus"
 
   }
 ]
 
-aca = [
+acas = [
   {
     name          = "aca-fmtest-sb-cus"
+    resource_group_name = "rg-fmtest-sb-cus"
     revision_mode = "Multiple"
     template = {
       max_replicas = 3
