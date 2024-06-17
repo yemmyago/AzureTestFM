@@ -118,9 +118,9 @@ resource "azurerm_container_registry" "acr" {
 
   network_rule_set {
 
-    default_action = try(each.value.network_rule_set.default_action, [])
-    ip_rule        = concat(try(each.value.network_rule_set.ip_rule, []))
-    subnet_ids     = try(each.value.network_rule_set.subnet_ids, [])
+    default_action = each.value.network_rule_set.default_action
+    ip_rule        = each.value.network_rule_set.ip_rule
+    subnet_ids     = ach.value.network_rule_set.subnet_ids
   }
   identity {
     type         = each.value.identity.type
