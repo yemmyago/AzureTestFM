@@ -31,7 +31,7 @@ resource "azurerm_key_vault" "kv" {
   }
   access_policy {
     tenant_id = "aa3ba334-375c-4f89-8679-aacd7f308101"
-    object_id = azurerm_user_assigned_identity.uami.object_id
+    object_id = azurerm_user_assigned_identity.uami[*].object_id
     key_permissions = [
       "Get",
       "List"
