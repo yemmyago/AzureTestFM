@@ -201,12 +201,12 @@ resource "azurerm_container_app" "aca" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = azurerm_user_assigned_identity.uami.id
+    identity_ids = azurerm_user_assigned_identity.uami[*].id
   }
 
   registry {
-    server   = azurerm_container_registry.acr.login_server
-    identity = azurerm_user_assigned_identity.uami.id
+    server   = azurerm_container_registry.acr[*].login_server
+    identity = azurerm_user_assigned_identity.uami[*].id
   }
 
   secret {
