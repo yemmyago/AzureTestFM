@@ -31,7 +31,7 @@ resource "azurerm_key_vault" "kv" {
   }
   access_policy {
     tenant_id = "aa3ba334-375c-4f89-8679-aacd7f308101"
-    object_id = [for instance in Azurerm_user_assigned_identity.uami: instance.object_id]
+    object_id = azurerm_user_assigned_identity.uami.object_id
     key_permissions = [
       "Get",
       "List"
@@ -156,7 +156,7 @@ resource "azurerm_container_registry" "acr" {
 resource "azurerm_role_assignment" "assignment" {
   for_each             = local.assignments
   name                 = each.value.name
-  scope                = azurerm_resource_group.rg
+  scope                = azurerm_resource_group.rg.name
   role_definition_name = each.value.role_definition_name
   principal_id         = azurerm_user_assigned_identity.uami.principal_id
 
@@ -184,7 +184,7 @@ resource "azurerm_container_app_environment" "acaenv" {
   name                       = each.value.name
   resource_group_name        = each.value.resource_group_name
   location                   = each.value.location
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
+  l                   
 
   depends_on = [
     azurerm_resource_group.rg,
