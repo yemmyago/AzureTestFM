@@ -215,27 +215,27 @@ resource "azurerm_container_app" "aca" {
     key_vault_secret_id = azurerm_key_vault_secret.kvsecret[*].id
 
   }
-  template = {
+  template {
     max_replicas = each.value.template.max_replicas
     min_replicas = each.value.template.min_replicas
 
-    container = {
+    container {
       name   = each.value.template.container.name
       image  = each.value.template.container.image
       cpu    = each.value.template.container.cpu
       memory = each.value.template.container.memory
 
-      readiness_probe = {
+      readiness_probe {
         transport = each.value.template.container.readiness_probe.transport
         port      = each.value.template.container.readiness_probe.port
       }
 
-      liveness_probe = {
+      liveness_probe {
         transport = each.value.template.container.liveness_probe.transport
         port      = each.value.template.container.liveness_probe.transport
       }
     }
-    http_scale_rule = {
+    http_scale_rule {
       name                = each.value.template.http_scale_rule
       concurrent_requests = each.value.template.http_scale_rule.concurrent_requests
 
