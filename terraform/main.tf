@@ -26,8 +26,7 @@ resource "azurerm_key_vault" "kv" {
   network_acls {
     bypass         = each.value.bypass
     default_action = each.value.default_action
-    ip_rules        = each.value.ip_rules
-
+    
   }
   access_policy {
     tenant_id = "aa3ba334-375c-4f89-8679-aacd7f308101"
