@@ -57,7 +57,7 @@ jobs:
         ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
         ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
         RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
-      run: terraform plan -no-color -var-file="./terraform/variables/cus-sb.tfvars"
+      run: terraform plan -no-color -var-file="./variables/cus-sb.tfvars"
 
                   
     - name: Terraform Apply
