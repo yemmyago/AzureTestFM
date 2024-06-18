@@ -17,7 +17,7 @@ resource "azurerm_user_assigned_identity" "uami" {
 
 resource "azurerm_key_vault" "kv" {
   for_each                   = local.kvs
-  name                       = each.value.name
+  name                       = each.key
   resource_group_name        = each.value.resource_group_name
   location                   = each.value.location
   tenant_id                  = "aa3ba334-375c-4f89-8679-aacd7f308101"
@@ -30,7 +30,7 @@ resource "azurerm_key_vault" "kv" {
   }
   access_policy {
     tenant_id = "aa3ba334-375c-4f89-8679-aacd7f308101"
-    object_id = tostring(azurerm_user_assigned_identity.uami[*].object_id)
+    object_id = data(azurerm_user_assigned_identity.uami[*].object_id)
     key_permissions = [
       "Get",
       "List"
@@ -100,7 +100,7 @@ resource "azurerm_key_vault_key" "kvkey" {
 
 resource "azurerm_container_registry" "acr" {
   for_each                      = local.acrs
-  name                          = each.value.name
+  name                          = each.key
   resource_group_name        = each.value.resource_group_name
   location                   = each.value.location
   sku                           = each.value.sku
@@ -157,7 +157,7 @@ resource "azurerm_role_assignment" "assignment" {
   name                 = each.key
   scope                = azurerm_resource_group.rg[*].name
   role_definition_name = each.value.role_definition_name
-  principal_id         = azurerm_user_assigned_identity.uami[*].principal_id
+  principal_id         = azurerm_user_assigned_identity.uami.principal_id
 
   depends_on = [
     azurerm_user_assigned_identity.uami,
@@ -193,7 +193,7 @@ resource "azurerm_container_app_environment" "acaenv" {
 
 resource "azurerm_container_app" "aca" {
   for_each                     = local.acas
-  name                         = each.value.name
+  name                         = each.key
   container_app_environment_id = azurerm_container_app_environment.acaenv[*].id
   resource_group_name          = each.value.name
   revision_mode                = each.value.revision_mode
