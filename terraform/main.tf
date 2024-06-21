@@ -30,7 +30,7 @@ resource "azurerm_key_vault" "kv" {
   }
   access_policy {
     tenant_id = "aa3ba334-375c-4f89-8679-aacd7f308101"
-    object_id =  azurerm_user_assigned_identity.uami[each.key].0.principal_id
+    object_id =  azurerm_user_assigned_identity.uami.principal_id
 
     key_permissions = [
       "Get",
@@ -59,7 +59,7 @@ resource "azurerm_key_vault_secret" "kvsecret" {
   for_each        = nonsensitive(local.kvsecrets)
   name            = each.key
   value           = each.value.value
-  key_vault_id    = azurerm_key_vault.kv[*].id
+  key_vault_id    = azurerm_key_vault.kv.id
   expiration_date = each.value.expiration_date
   depends_on = [
 
@@ -70,7 +70,7 @@ resource "azurerm_key_vault_secret" "kvsecret" {
 resource "azurerm_key_vault_key" "kvkey" {
   for_each     = nonsensitive(local.kvkeys)
   name         = each.key
-  key_vault_id = azurerm_key_vault.kv[*].id
+  key_vault_id = azurerm_key_vault.kv.id
   key_type     = each.value.key_type
   key_size     = each.value.key_size
 
@@ -124,14 +124,14 @@ resource "azurerm_container_registry" "acr" {
   }
   identity {
     type         = each.value.identity.type
-    identity_ids = azurerm_user_assigned_identity.uami[*].id
+    identity_ids = azurerm_user_assigned_identity.uami.id
 
   }
 
   encryption {
 
-    key_vault_key_id   = azurerm_key_vault_key.kvkey[*].id
-    identity_client_id = azurerm_user_assigned_identity.uami[*].client_id
+    key_vault_key_id   = azurerm_key_vault_key.kvkey.id
+    identity_client_id = azurerm_user_assigned_identity.uami.client_id
   }
 
   trust_policy {
@@ -156,9 +156,9 @@ resource "azurerm_container_registry" "acr" {
 resource "azurerm_role_assignment" "assignment" {
   for_each             = local.assignments
   name                 = each.key
-  scope                = azurerm_resource_group.rg[*].name
+  scope                = azurerm_resource_group.rg.name
   role_definition_name = each.value.role_definition_name
-  principal_id         = azurerm_user_assigned_identity.uami[*].principal_id
+  principal_id         = azurerm_user_assigned_identity.uami.principal_id
 
   depends_on = [
     azurerm_user_assigned_identity.uami,
@@ -195,24 +195,24 @@ resource "azurerm_container_app_environment" "acaenv" {
 resource "azurerm_container_app" "aca" {
   for_each                     = local.acas
   name                         = each.key
-  container_app_environment_id = azurerm_container_app_environment.acaenv[*].id
+  container_app_environment_id = azurerm_container_app_environment.acaenv.id
   resource_group_name          = each.value.name
   revision_mode                = each.value.revision_mode
 
   identity {
     type         = "UserAssigned"
-    identity_ids = azurerm_user_assigned_identity.uami[*].id
+    identity_ids = azurerm_user_assigned_identity.uami.id
   }
 
   registry {
     server   = azurerm_container_registry.acr[*].login_server
-    identity = azurerm_user_assigned_identity.uami[*].id
+    identity = azurerm_user_assigned_identity.uami.id
   }
 
   secret {
-    name                = azurerm_key_vault_secret.kvsecret[*].name
-    identity            = azurerm_user_assigned_identity.uami[*].id
-    key_vault_secret_id = azurerm_key_vault_secret.kvsecret[*].id
+    name                = azurerm_key_vault_secret.kvsecret.name
+    identity            = azurerm_user_assigned_identity.uami.id
+    key_vault_secret_id = azurerm_key_vault_secret.kvsecret.id
 
   }
   template {
