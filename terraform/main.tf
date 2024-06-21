@@ -16,7 +16,7 @@ resource "azurerm_user_assigned_identity" "uami" {
 }
 
 resource "azurerm_key_vault" "kv" {
-  for_each                   = local.kvs
+  for_each                   = zipmap(local.kvs, local.uami)
   name                       = each.key
   resource_group_name        = each.value.resource_group_name
   location                   = each.value.location
@@ -30,7 +30,7 @@ resource "azurerm_key_vault" "kv" {
   }
   access_policy {
     tenant_id = "aa3ba334-375c-4f89-8679-aacd7f308101"
-    object_id =  azurerm_user_assigned_identity.uami[name].principal_id
+    object_id =  azurerm_user_assigned_identity.uami[each.key].0.principal_id
 
     key_permissions = [
       "Get",
