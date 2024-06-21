@@ -16,7 +16,7 @@ resource "azurerm_user_assigned_identity" "uami" {
 }
 
 resource "azurerm_key_vault" "kv" {
-  for_each                   = zipmap(local.kvs, local.uami)
+  for_each                   = zipmap(local.kvs, local.uamis)
   name                       = each.key
   resource_group_name        = each.value.resource_group_name
   location                   = each.value.location
